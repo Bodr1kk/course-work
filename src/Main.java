@@ -11,6 +11,7 @@ public class Main {
     static int wT = 1000;
 
     static double[][] W = new double[wX][wT];
+    static double[][]  MatrixPutTX = new double[wX][wT];
     static double h = (double) 1/wX;
     static double tau = (double) Math.pow(h,2)*(0.1);
 
@@ -22,7 +23,10 @@ public class Main {
         return W[i][k]+tau*(5*((W[i-1][k]-2*W[i][k]+W[i+1][k])/(h*h))+5*Math.pow(W[i][k],0.5)*((W[i+1][k]-W[i-1][k])/(2*h)));
     }
 
+
+
     public static void main(String[] args) throws IOException {
+
         long startSerialTime = System.nanoTime();
 
         for(int i=0;i<W.length;i++){
@@ -41,6 +45,19 @@ public class Main {
         }
         long endSerialTime = System.nanoTime();
         long SerialTime = endSerialTime - startSerialTime;
+
+
+        FileWriter filePutTX = new FileWriter("MatrixPutTX.txt");
+
+        filePutTX.write("ListPlot3D[{"+"{"+(0.0)+","+(0.0)+","+W[0][0]+"}");
+        for (int i = 0; i < W.length; i++)
+        {
+            for (int j = 0; j < W[0].length; j++) {
+                filePutTX.write(",{" + (i * h) + "," + (j * tau) + "," + W[i][j] + "}");
+            }
+        }
+        filePutTX.write("}, Mesh -> All]");
+        filePutTX.close();
 
         FileWriter FileSerial = new FileWriter("serial.txt");
 
